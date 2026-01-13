@@ -1,9 +1,9 @@
 import logging
 import sys
+import argparse
+from pathlib import Path
 
 from file_organizer import order_dir
-
-DIR_PATH = "/home/miguel/Descargas"
 
 # Configurar logging
 logging.basicConfig(
@@ -14,9 +14,20 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
+    # Parsear argumentos de línea de comandos
+    parser = argparse.ArgumentParser(
+        description="Organiza archivos en carpetas según su extensión"
+    )
+    parser.add_argument(
+        "directory",
+        nargs="?",
+        default=str(Path.home() / "Downloads"),
+        help="Directorio a organizar (por defecto: ~/Downloads)"
+    )
+    args = parser.parse_args()
+
     try:
-        order_dir(DIR_PATH)
-        
+        order_dir(args.directory)
     except (FileNotFoundError, NotADirectoryError) as e:
         logger.error(f"Error: {e}")
         sys.exit(1)
