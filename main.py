@@ -37,6 +37,7 @@ def main():
 
         moved = False
         for folder, extensions in EXTENSIONS_DICT.items():
+            # Verificar si la extensión del archivo está en el conjunto de extensiones
             if file_ext in extensions:
                 new_path = path / folder
                 new_path.mkdir(exist_ok=True)
@@ -44,9 +45,10 @@ def main():
                 file.rename(new_path / file.name)
                 files_moved += 1
                 moved = True
-                break
+                break # Si encuentra la extensión, no necesita seguir buscando
 
         if not moved:
+            # Si la extensión no coincide con ninguna categoría se mueve a "others"
             logger.warning(f"Extensión no reconocida: {file.name} ({file_ext})")
             new_path = path / "others"
             new_path.mkdir(exist_ok=True)
