@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
+.mypy_cache/
 
 # Virtual environments
 .venv/
@@ -24,3 +25,6 @@ Thumbs.db
 # uv
 .uv/
 uv.lock
+
+# Logs específicos del usuario
+organizer.log
