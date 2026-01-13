@@ -11,17 +11,3 @@ EXTENSIONS_DICT = {
     "ebooks": {".epub", ".mobi", ".azw", ".azw3"},
     "references": {".ris", ".flatpakref"},
 }
-
-# Extensiones de archivos temporales generados durante descargas
-TEMPORARY_EXTENSIONS = {
-    ".crdownload",  # Chrome
-    ".tmp",         # Temporal genérico
-    ".download",    # Firefox
-    ".part",        # Firefox, aria2, wget
-    ".partial",     # Genérico
-    ".!ut",         # uTorrent
-    ".bc!",         # BitComet
-    ".dlpart",      # Download managers
-    ".opdownload",  # Opera
-    ".wddownload",  # WebDownloader
-}
