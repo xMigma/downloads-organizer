@@ -1,5 +1,6 @@
 from pathlib import Path
 from hashlib import md5
+from argparse import ArgumentParser
 import logging
 
 logging.basicConfig(
@@ -52,14 +53,13 @@ def search_duplicates(path: Path) -> list[list[Path]]:
         
     
 
-def main(path: Path) -> None:
-    directory = Path(path)
+def main(directory_path: Path) -> None:
     
-    if not directory.is_dir():
-        logging.error(f"{directory} no es un directorio")
+    if not directory_path.is_dir():
+        logging.error(f"{directory_path} no es un directorio")
         return
     
-    duplicates = search_duplicates(path)
+    duplicates = search_duplicates(directory_path)
     
     if not duplicates:
         print("No se encontraron archivos duplicados")
@@ -78,6 +78,16 @@ def main(path: Path) -> None:
     
     
 if __name__ == '__main__':
-    path = Path("/home/miguel/Descargas")
+    parser = ArgumentParser(
+        description='Busca y reporta archivos duplicados en un directorio'
+    )
     
-    main(path)
+    parser.add_argument(
+        'directory',
+        type=Path,
+        help='Ruta del directorio donde buscar archivos duplicados'
+    )
+    
+    args = parser.parse_args()
+    
+    main(args.directory)
