@@ -9,10 +9,12 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
-def group_entries_by_size(path: Path) -> list[list[Path]]:
+def group_entries_by_size(path: Path, recursive: bool = False) -> list[list[Path]]:
     files_by_size: dict[int, list[Path]] = {}
     
-    for entry in path.iterdir():
+    iterator = path.rglob('*') if recursive else path.iterdir()
+    
+    for entry in iterator:
         if entry.is_dir():
             logging.debug(f'Skipping directory: {entry}')
             continue
@@ -39,8 +41,8 @@ def entries_with_same_hash(paths: list[Path]) -> list[list[Path]]:
     if len(file_list) > 1
     ]
 
-def search_duplicates(path: Path) -> list[list[Path]]:
-    entries = group_entries_by_size(path)
+def search_duplicates(path: Path, recursive: bool = False) -> list[list[Path]]:
+    entries = group_entries_by_size(path, recursive)
     
     if not entries:
         return []
@@ -53,13 +55,13 @@ def search_duplicates(path: Path) -> list[list[Path]]:
         
     
 
-def main(directory_path: Path) -> None:
+def main(directory_path: Path, recursive: bool = False) -> None:
     
     if not directory_path.is_dir():
         logging.error(f"{directory_path} no es un directorio")
         return
     
-    duplicates = search_duplicates(directory_path)
+    duplicates = search_duplicates(directory_path, recursive)
     
     if not duplicates:
         print("No se encontraron archivos duplicados")
@@ -88,6 +90,12 @@ if __name__ == '__main__':
         help='Ruta del directorio donde buscar archivos duplicados'
     )
     
+    parser.add_argument(
+        '-r', '--recursive',
+        action='store_true',
+        help='Buscar archivos duplicados recursivamente en subdirectorios'
+    )
+    
     args = parser.parse_args()
     
-    main(args.directory)
+    main(args.directory, args.recursive)
