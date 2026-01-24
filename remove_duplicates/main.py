@@ -74,9 +74,46 @@ def main(directory_path: Path, recursive: bool = False) -> None:
         size_mb = size / (1024 * 1024)
         
         print(f"Grupo {idx} ({len(duplicated_files)} archivos, {size_mb:.2f} MB cada uno):")
-        for file in duplicated_files:
-            print(f" - {file}")
+        for file_idx, file in enumerate(duplicated_files, 1):
+            print(f"  {file_idx}. {file}")
         print("")
+    
+    response = input("¿Deseas eliminar duplicados? (s/n): ").strip().lower()
+    if response != 's':
+        print("Operación cancelada")
+        return
+    
+    for idx, duplicated_files in enumerate(duplicates, 1):
+        print(f"\nGrupo {idx}:")
+        for file_idx, file in enumerate(duplicated_files, 1):
+            print(f"  {file_idx}. {file}")
+        
+        keep = input(f"¿Cuál archivo conservar? (1-{len(duplicated_files)}, 0=omitir, q=omitir todos): ").strip().lower()
+        
+        if keep == 'q':
+            print("Omitiendo grupos restantes...")
+            break
+        
+        if not keep.isdigit():
+            print("Omitiendo grupo...")
+            continue
+            
+        keep_idx = int(keep)
+        if keep_idx == 0 or keep_idx > len(duplicated_files):
+            print("Omitiendo grupo...")
+            continue
+        
+        for file_idx, file in enumerate(duplicated_files, 1):
+            if file_idx == keep_idx:
+                print(f"  Conservando: {file}")
+                continue
+            try:
+                file.unlink()
+                print(f"  Eliminado: {file}")
+            except Exception as e:
+                logging.error(f"Error al eliminar {file}: {e}")
+    
+    print("\nProceso completado")
     
     
 if __name__ == '__main__':
