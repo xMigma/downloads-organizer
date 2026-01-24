@@ -12,6 +12,10 @@ SCREENSHOTS_DIR = "/home/miguel/Imágenes/Prueba"
 
 def move_file_to_date_folder(directory: Path):
     for file in directory.iterdir():
+        if not file.is_file():
+            logging.debug(f"Omitiendo (no es archivo): {file.name}")
+            continue
+        
         stat = file.stat()
         date = datetime.fromtimestamp(stat.st_mtime)
         
