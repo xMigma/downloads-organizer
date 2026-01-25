@@ -9,31 +9,30 @@ SHARED_DIR="$(dirname "$SCRIPT_DIR")/shared"
 source "$SHARED_DIR/cron_installer.sh"
 
 # Configuración específica de este organizador
-CRON_ID="file-organizer"
-APP_NAME="Organizador de Descargas"
-DEFAULT_INSTALL_PATH="$HOME/.local/bin/file-organizer"
-FILES_TO_INSTALL="main.py file_organizer.py extensions.py"
-GITHUB_BASE_URL="https://raw.githubusercontent.com/xMigma/downloads-organizer/main"
+CRON_ID="screenshot-organizer"
+APP_NAME="Organizador de Screenshots"
+DEFAULT_INSTALL_PATH="$HOME/.local/bin/screenshot-organizer"
+FILES_TO_INSTALL="main.py"
 
 show_install_banner "$APP_NAME"
 
 # Detectar directorio de instalación
 INSTALL_PATH="${INSTALL_DIR:-$DEFAULT_INSTALL_PATH}"
 
-# Instalar archivos (locales o remotos)
-install_files "$INSTALL_PATH" "$FILES_TO_INSTALL" "$GITHUB_BASE_URL"
+# Instalar archivos
+install_files "$INSTALL_PATH" "$FILES_TO_INSTALL"
 chmod +x "$INSTALL_PATH/main.py"
 
 echo "Archivos instalados en: $INSTALL_PATH"
 echo ""
 
 # Preguntar directorio a organizar
-DEFAULT_DIR="$HOME/Downloads"
+DEFAULT_DIR="$HOME/Imágenes/Capturas de Pantalla"
 if [ ! -d "$DEFAULT_DIR" ]; then
-    DEFAULT_DIR="$HOME/Descargas"
+    DEFAULT_DIR="$HOME/Pictures/Screenshots"
 fi
 
-TARGET_DIR=$(ask_directory "¿Qué directorio quieres organizar?" "$DEFAULT_DIR")
+TARGET_DIR=$(ask_directory "¿Qué directorio de screenshots quieres organizar?" "$DEFAULT_DIR")
 
 # Verificar directorio
 if ! ensure_directory "$TARGET_DIR"; then
@@ -49,5 +48,8 @@ LOG_FILE="$INSTALL_PATH/organizer.log"
 COMMAND="python3 $INSTALL_PATH/main.py \"$TARGET_DIR\""
 
 install_reboot_cron "$CRON_ID" "$COMMAND" "$LOG_FILE"
+
+# Actualizar el directorio en main.py
+sed -i "s|SCREENSHOTS_DIR = .*|SCREENSHOTS_DIR = \"$TARGET_DIR\"|" "$INSTALL_PATH/main.py"
 
 show_install_complete "$TARGET_DIR" "$LOG_FILE" "$INSTALL_PATH" "$COMMAND"

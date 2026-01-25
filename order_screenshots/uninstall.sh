@@ -8,10 +8,10 @@ SHARED_DIR="$(dirname "$SCRIPT_DIR")/shared"
 source "$SHARED_DIR/cron_installer.sh"
 
 # Configuración específica
-CRON_ID="file-organizer"
-DEFAULT_INSTALL_PATH="$HOME/.local/bin/file-organizer"
+CRON_ID="screenshot-organizer"
+DEFAULT_INSTALL_PATH="$HOME/.local/bin/screenshot-organizer"
 
-echo "Desinstalando organizador de descargas..."
+echo "Desinstalando organizador de screenshots..."
 echo ""
 
 INSTALL_PATH="${INSTALL_DIR:-$DEFAULT_INSTALL_PATH}"
