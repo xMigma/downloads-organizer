@@ -1,153 +1,52 @@
-# Organizador de Descargas
+# File Automation Toolkit
 
-Script de Python que organiza automáticamente los archivos de tu carpeta de Descargas en subcarpetas según su tipo (imágenes, documentos, videos, etc.).
+Conjunto de scripts de Python para automatizar la organización de archivos y eliminación de duplicados.
 
-## Características
+## Herramientas
 
-- Organiza archivos por extensión en carpetas predefinidas
-- Se ejecuta automáticamente al iniciar el sistema (con cron)
-- Configuración sencilla
-- Sin dependencias externas
-- Logs de actividad
+| Script | Función |
+|--------|---------|
+| `order_downloads` | Clasifica archivos por extensión (Imágenes, Docs, Videos...) |
+| `order_screenshots` | Organiza capturas por semana (`2024_sem05`) |
+| `remove_duplicates` | Detecta y elimina archivos duplicados (hash MD5) |
 
-## Instalación
-
-```bash
-curl -sSL https://raw.githubusercontent.com/xMigma/downloads-organizer/main/install.sh | bash
-```
-
-O si prefieres revisar el script primero:
+## Instalación Rápida
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/xMigma/downloads-organizer/main/install.sh -o install.sh
-chmod +x install.sh
-./install.sh
+# Descargas
+./order_downloads/install.sh
+
+# Capturas
+./order_screenshots/install.sh
 ```
 
-El instalador te preguntará qué directorio organizar y lo configurará todo automáticamente.
+Los scripts se ejecutan automáticamente en cada reinicio (`@reboot` vía cron).
 
-### Ejecución manual
-
-Para probar el script sin reiniciar:
+## Uso Manual
 
 ```bash
-# Usar el directorio por defecto (~/Downloads)
-python3 main.py
+# Organizar descargas
+python3 order_downloads/main.py ~/Downloads
 
-# Especificar un directorio
-python3 main.py ~/Descargas
+# Organizar capturas
+python3 order_screenshots/main.py
+
+# Buscar duplicados (recursivo)
+python3 remove_duplicates/main.py ~/Downloads -r
 ```
 
-### Ver logs
+## Personalización
 
-Los logs se guardan en `organizer.log`:
-
-```bash
-tail -f organizer.log
-```
-
-## Configuración
-
-**Cambiar el directorio configurado:**
-
-Si ya instalaste el script y quieres cambiar el directorio:
-
-```bash
-./uninstall.sh  # Elimina la configuración anterior
-./install.sh    # Instala con el nuevo directorio
-```
-
-## Categorías de archivos
-
-El script organiza los archivos en estas carpetas:
-
-- **images**: jpg, jpeg, png, gif, bmp, svg, webp, etc.
-- **videos**: mp4, avi, mkv, mov, wmv, flv, etc.
-- **audios**: mp3, wav, flac, aac, ogg, m4a, etc.
-- **documents**: pdf, doc, docx, txt, odt, etc.
-- **compressed**: zip, rar, 7z, tar, gz, etc.
-- **executables**: exe, msi, deb, rpm, appimage, etc.
-- **code**: py, js, java, cpp, html, css, etc.
-- **others**: cualquier otro tipo de archivo
-
-Puedes personalizar estas categorías editando [extensions.py](extensions.py).
+Edita `order_downloads/extensions.json` para añadir o modificar categorías de archivos.
 
 ## Desinstalación
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/xMigma/downloads-organizer/main/uninstall.sh | bash
-```
-
-O si instalaste desde el repositorio:
-
-```bash
-./uninstall.sh
-```
-
-O manualmente:
-
-```bash
-crontab -l | grep -v 'file-organizer' | crontab -
-rm -rf ~/.local/bin/file-organizer
-```
-
-Esto eliminará el cron job y los archivos instalados. Los archivos organizados permanecerán en su lugar.
-
-## Estructura del proyecto
-
-```
-.
-├── main.py              # Script principal
-├── file_organizer.py    # Lógica de organización
-├── extensions.py        # Definición de categorías y extensiones
-├── install.sh           # Instalador
-├── uninstall.sh         # Desinstalador
-└── README.md            # Documentación
+./order_downloads/uninstall.sh
+./order_screenshots/uninstall.sh
 ```
 
 ## Requisitos
 
-- Python 3.8 o superior
-- Linux/Unix con cron
-- No requiere dependencias externas
-
-## Solución de problemas
-
-### El script no se ejecuta al reiniciar
-
-Verifica que el cron job esté instalado:
-```bash
-crontab -l | grep file-organizer
-```
-
-Verifica que cron esté corriendo:
-```bash
-systemctl status cron
-```
-
-### Permisos denegados
-
-Asegúrate de que tienes permisos de escritura en la carpeta a organizar:
-```bash
-ls -ld ~/Downloads
-```
-
-### Ver errores en los logs
-
-```bash
-tail -f organizer.log
-```
-
-## Contribuir
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Haz fork del proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -m 'Añade nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
-
-## Licencia
-
-Este proyecto es de código abierto y está disponible bajo la licencia MIT.
+- Python 3.8+
+- Linux/macOS con cron
