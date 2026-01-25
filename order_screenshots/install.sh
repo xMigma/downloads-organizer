@@ -49,7 +49,4 @@ COMMAND="python3 $INSTALL_PATH/main.py \"$TARGET_DIR\""
 
 install_reboot_cron "$CRON_ID" "$COMMAND" "$LOG_FILE"
 
-# Actualizar el directorio en main.py
-sed -i "s|SCREENSHOTS_DIR = .*|SCREENSHOTS_DIR = \"$TARGET_DIR\"|" "$INSTALL_PATH/main.py"
-
 show_install_complete "$TARGET_DIR" "$LOG_FILE" "$INSTALL_PATH" "$COMMAND"

@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import datetime
 import logging
+import sys
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -8,7 +9,7 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
-SCREENSHOTS_DIR = "/home/miguel/Imágenes/Prueba"
+DEFAULT_SCREENSHOTS_DIR = "/home/miguel/Imágenes/Capturas de Pantalla"
 
 def move_file_to_date_folder(directory: Path):
     for file in directory.iterdir():
@@ -28,14 +29,18 @@ def move_file_to_date_folder(directory: Path):
         logging.info(f"Archivo '{file.name}' movido correctamente.")
 
 def main():
-    directory = Path(SCREENSHOTS_DIR)
+    if len(sys.argv) > 1:
+        directory = Path(sys.argv[1])
+    else:
+        directory = Path(DEFAULT_SCREENSHOTS_DIR)
+        logging.info(f"No se proporcionó directorio, usando default: {directory}")
     
     if not directory.is_dir():
         logging.error(f"{directory} no es un directorio")
         return
     
     move_file_to_date_folder(directory)
-    
-    
+
+
 if __name__ == '__main__':
     main()
